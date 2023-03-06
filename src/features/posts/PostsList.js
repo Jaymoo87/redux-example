@@ -6,9 +6,16 @@ import { Spinner } from '../../components/Spinner'
 import { PostAuthor } from './PostAuthor'
 import { ReactionButtons } from './ReactionButtons'
 import { TimeAgo } from './TimeAgo'
-import { selectAllPosts, fetchPosts } from './postsSlice'
+import {
+  selectAllPosts,
+  fetchPosts,
+  selectPostIds,
+  selectPostById,
+} from './postsSlice'
 
-let PostExcerpt = ({ post }) => {
+let PostExcerpt = ({ postId }) => {
+  const post = useSelector((state) => selectPostById(state, postId))
+
   return (
     <article className="post-excerpt">
       <h3>{post.title}</h3>
@@ -31,6 +38,7 @@ export const PostsList = () => {
   const dispatch = useDispatch()
   const posts = useSelector(selectAllPosts)
   const error = useSelector((state) => state.posts.error)
+  const orderedPostIds = useSelector(selectPostIds)
 
   const postStatus = useSelector((state) => state.posts.status)
 
@@ -46,12 +54,8 @@ export const PostsList = () => {
     content = <Spinner text="Loading..." />
   } else if (postStatus === 'succeeded') {
     // Sort posts in reverse chronological order by datetime string
-    const orderedPosts = posts
-      .slice()
-      .sort((a, b) => b.date.localeCompare(a.date))
-
-    content = orderedPosts.map((post) => (
-      <PostExcerpt key={post.id} post={post} />
+    content = orderedPostIds.map((postId) => (
+      <PostExcerpt key={postId} postId={postId} />
     ))
   } else if (postStatus === 'failed') {
     content = <div>{error}</div>

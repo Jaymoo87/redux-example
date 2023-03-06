@@ -10,7 +10,7 @@ import {
 export const Navbar = () => {
   const dispatch = useDispatch()
   const notifications = useSelector(selectAllNotifications)
-  const numUnreadNotifications = notifications.filter((n) => !n.read).length
+  const numUnreadNotifications = notifications?.filter((n) => !n.read).length
 
   const fetchNewNotifications = () => {
     dispatch(fetchNotifications())

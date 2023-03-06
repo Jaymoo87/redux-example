@@ -21,7 +21,7 @@ export const NotificationsList = () => {
     dispatch(allNotificationsRead())
   })
 
-  const renderedNotifications = notifications.map((notification) => {
+  const renderedNotifications = notifications?.map((notification) => {
     const date = parseISO(notification.date)
     const timeAgo = formatDistanceToNow(date)
     const user = users.find((user) => user.id === notification.user) || {
